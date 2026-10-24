@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المريخ | Al-Marikh</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background-color: #050505; color: #e5e7eb; }
+        .glass-card { background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(234, 88, 12, 0.15); }
+        
+        /* شكل السكرول بار ليناسب الدارك مود */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #ea580c; border-radius: 10px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-orange-600 selection:text-white">
+
+    <!-- Header -->
+    <header class="bg-black/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-orange-900/50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-orange-900/30 flex items-center justify-center border border-orange-500/50 text-orange-400 font-bold text-sm shadow-inner">
+                    MRX
+                </div>
+                <div>
+                    <span class="text-lg font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-300 block leading-tight">AL-MARIKH</span>
+                    <span class="text-[10px] text-gray-400 tracking-widest block uppercase mt-0.5">More than just clothes</span>
+                </div>
+            </div>
+
+            <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-400">
+                <a href="#clothing" class="hover:text-orange-400 transition">التيشيرتات والهودي</a>
+                <a href="#shoes" class="hover:text-orange-400 transition">البناطيل</a>
+                <a href="#accessories" class="hover:text-orange-400 transition">اكسسوارات</a>
+                <a href="#offers" class="hover:text-orange-400 transition text-orange-500 font-bold">الـ Drop الأول</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <button onclick="openCartModal()" class="relative bg-orange-600/10 border border-orange-500/30 text-orange-400 px-4 py-2 rounded-full text-xs font-semibold hover:bg-orange-600 hover:text-white transition flex items-center gap-2">
+                    🚀 كبسولة الشحن <span id="cart-badge" class="bg-orange-600 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px]">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Store View -->
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-16 flex-grow w-full">
+
+        <!-- Hero Section -->
+        <section class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-black to-black py-16 px-6 text-center rounded-3xl border border-orange-900/30 shadow-[0_0_30px_rgba(234,88,12,0.1)]">
+            <div class="relative z-10 max-w-2xl mx-auto space-y-4">
+                <span class="bg-orange-900/30 text-orange-400 px-3 py-1 rounded-full text-xs font-bold border border-orange-500/20">✨ كوليكشن الإطلاق الأول</span>
+                <h1 class="text-4xl md:text-6xl font-black text-white tracking-[0.1em] uppercase drop-shadow-lg mt-4">AL-MARIKH</h1>
+                <p class="text-orange-500 font-medium text-lg uppercase tracking-widest">More than just clothes</p>
+                <p class="text-gray-400 text-sm leading-relaxed">اكتشف أحدث إصدارات المريخ من الملابس الكاجوال والستريت وير، خامات استثنائية وتصميمات تواكب المستقبل.</p>
+                <div class="pt-4 flex justify-center gap-3">
+                    <a href="#clothing" class="bg-gradient-to-r from-orange-600 to-amber-600 text-white px-8 py-3 rounded-full text-sm font-bold shadow-[0_0_15px_rgba(234,88,12,0.4)] hover:scale-105 transition duration-300">اكتشف الكوليكشن 🪐</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Sections Generated via JavaScript -->
+        <section id="clothing" class="space-y-6">
+            <div class="border-b border-orange-900/50 pb-3">
+                <h2 class="text-2xl font-bold text-white">قسم التيشيرتات والهودي</h2>
+            </div>
+            <div id="clothing-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+        </section>
+
+        <section id="shoes" class="space-y-6">
+            <div class="border-b border-orange-900/50 pb-3">
+                <h2 class="text-2xl font-bold text-white">قسم البناطيل</h2>
+            </div>
+            <div id="shoes-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+        </section>
+
+        <section id="accessories" class="space-y-6">
+            <div class="border-b border-orange-900/50 pb-3">
+                <h2 class="text-2xl font-bold text-white">قسم الاكسسوارات</h2>
+            </div>
+            <div id="accessories-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+        </section>
+
+        <section id="offers" class="bg-gradient-to-r from-gray-900 to-black text-white rounded-3xl p-8 space-y-6 shadow-xl border border-orange-800/40 relative overflow-hidden">
+            <!-- إضاءة خلفية للبوكس -->
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(234,88,12,0.1),_transparent_50%)]"></div>
+            
+            <div class="border-b border-orange-800/50 pb-3 relative z-10">
+                <h2 class="text-2xl font-bold text-orange-400">عروض الأطقم الكاملة (Outfit Bundles) 🚀</h2>
+            </div>
+            <div id="offers-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 relative z-10"></div>
+        </section>
+
+    </main>
+
+    <!-- Cart & Checkout Modal -->
+    <div id="cart-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-gray-900 rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-[0_0_40px_rgba(234,88,12,0.2)] relative border border-orange-500/20 max-h-[90vh] overflow-y-auto text-white">
+            <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+                <h3 class="text-xl font-bold text-orange-400">كبسولة الشحن الخاصة بك 🚀</h3>
+                <button onclick="closeCartModal()" class="text-gray-500 hover:text-white text-lg font-bold transition">✕</button>
+            </div>
+
+            <div id="cart-items-list" class="space-y-3 max-h-48 overflow-y-auto">
+                <p class="text-center text-gray-500 text-xs py-4">الكبسولة فارغة حالياً..</p>
+            </div>
+
+            <div class="border-t border-gray-800 pt-3 flex justify-between items-center text-gray-300 font-bold">
+                <span>إجمالي الطلب:</span>
+                <span id="cart-total-price" class="text-orange-500 text-lg">0 EGP</span>
+            </div>
+
+            <form id="checkout-form" onsubmit="submitOrderToSupabase(event)" class="space-y-3 pt-2">
+                <h4 class="font-bold text-orange-300 text-xs border-b border-gray-800 pb-1">بيانات الهبوط (العنوان بالتفصيل):</h4>
+                <div>
+                    <label class="block text-[11px] font-bold text-gray-400 mb-1">الاسم بالكامل</label>
+                    <input type="text" id="cust-name" required class="w-full px-3 py-2 bg-black border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500 transition" placeholder="الاسم ثلاثي">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-gray-400 mb-1">رقم التليفون للتواصل</label>
+                    <input type="tel" id="cust-phone" required class="w-full px-3 py-2 bg-black border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500 transition" placeholder="01xxxxxxxx">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-gray-400 mb-1">العنوان بالتفصيل</label>
+                    <textarea id="cust-address" required rows="2" class="w-full px-3 py-2 bg-black border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500 transition" placeholder="المحافظة، المنطقة، الشارع، رقم العمارة..."></textarea>
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button type="submit" id="submit-btn" class="flex-1 bg-gradient-to-r from-orange-600 to-amber-600 text-white py-2.5 rounded-xl text-xs font-bold hover:shadow-[0_0_15px_rgba(234,88,12,0.4)] transition">تأكيد الإطلاق 🚀</button>
+                    <button type="button" onclick="closeCartModal()" class="bg-gray-800 text-gray-400 px-4 py-2.5 rounded-xl text-xs font-semibold hover:bg-gray-700 hover:text-white transition">إغلاق</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-white/5 py-6 text-center text-xs text-gray-600 mt-12 space-y-2">
+        <p>جميع الحقوق محفوظة لـ Al-Marikh © 2026 | مركز القيادة: <span class="text-orange-500 font-bold">01xxxxxxxx</span></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // إعدادات اتصال Supabase
+        const SUPABASE_URL = 'https://girbqgwygqlwbppetpnt.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_8ncia4DA9wGoO_9YTFID-g_2lCvg~...'; // ضف مفتاحك هنا
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // قائمة منتجات المريخ
+        const products = [
+            { id: 1, name: "هودي الجاذبية - أوفر سايز", price: 850, category: "clothing", image: "image.png", sizes: ["M", "L", "XL", "XXL"] },
+            { id: 2, name: "تيشيرت المدار", price: 550, category: "clothing", image: "image.png", sizes: ["S", "M", "L", "XL"] },
+            { id: 3, name: "بنطلون كارغو النيزك", price: 700, category: "shoes", image: "image.png", sizes: ["30", "32", "34", "36"] },
+            { id: 4, name: "سلسلة الفضاء", price: 250, category: "accessories", image: "image.png", sizes: ["أستاندرد"] },
+            { id: 5, name: "طقم المريخ الكامل", price: 1900, category: "offers", image: "image.png", sizes: ["M", "L", "XL"] }
+        ];
+
+        let cart = [];
+
+        function renderProducts() {
+            const clothingEl = document.getElementById('clothing-container');
+            const shoesEl = document.getElementById('shoes-container');
+            const accEl = document.getElementById('accessories-container');
+            const offersEl = document.getElementById('offers-container');
+
+            clothingEl.innerHTML = ""; shoesEl.innerHTML = ""; accEl.innerHTML = ""; offersEl.innerHTML = "";
+
+            products.forEach(p => {
+                let sizesHtml = p.sizes.map((s, idx) => `
+                    <button type="button" onclick="selectSize(this, ${p.id})" class="size-btn-${p.id} px-3 py-1 rounded-lg border border-gray-700 bg-black text-xs font-bold text-gray-400 hover:border-orange-500 hover:text-orange-400 transition ${idx === 0 ? 'active border-orange-500 text-orange-400 bg-orange-500/10' : ''}">${s}</button>
+                `).join('');
+
+                let cardHtml = `
+                    <div class="glass-card rounded-3xl overflow-hidden shadow-sm hover:border-orange-500/50 hover:-translate-y-1 transition duration-300 p-4 flex flex-col justify-between ${p.category === 'offers' ? 'bg-black/40 border-orange-500/30' : ''}">
+                        <div>
+                            <div class="h-56 bg-gray-900/60 rounded-2xl flex items-center justify-center text-gray-600 text-sm mb-4 border border-white/5 relative overflow-hidden group">
+                                <img src="${p.image}" alt="${p.name}" class="w-1/2 h-auto object-contain drop-shadow-[0_0_15px_rgba(234,88,12,0.3)] group-hover:scale-110 transition duration-500" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <span style="display:none;" class="text-xs font-bold">[ صورة المنتج ]</span>
+                            </div>
+                            <h3 class="font-bold text-gray-200 text-lg">${p.name}</h3>
+                            <p class="text-orange-500 font-black mt-1 text-xl">${p.price} EGP</p>
+                            
+                            <div class="mt-4">
+                                <label class="block text-[11px] font-bold text-gray-500 mb-2">المقاس:</label>
+                                <div class="flex gap-2 flex-wrap" id="size-group-${p.id}">
+                                    ${sizesHtml}
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="addToCart(${p.id})" class="mt-6 w-full bg-white/5 border border-white/10 text-white hover:bg-orange-600 hover:border-orange-500 py-3 rounded-xl text-xs font-bold transition duration-300">إضافة للكبسولة 🚀</button>
+                    </div>
+                `;
+
+                if (p.category === 'clothing') clothingEl.innerHTML += cardHtml;
+                else if (p.category === 'shoes') shoesEl.innerHTML += cardHtml;
+                else if (p.category === 'accessories') accEl.innerHTML += cardHtml;
+                else if (p.category === 'offers') offersEl.innerHTML += cardHtml;
+            });
+        }
+
+        function selectSize(btn, productId) {
+            const group = document.getElementById(`size-group-${productId}`);
+            const buttons = group.getElementsByTagName('button');
+            for (let b of buttons) {
+                b.classList.remove('border-orange-500', 'text-orange-400', 'bg-orange-500/10', 'active');
+            }
+            btn.classList.add('border-orange-500', 'text-orange-400', 'bg-orange-500/10', 'active');
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const group = document.getElementById(`size-group-${productId}`);
+            let selectedSize = "أستاندرد";
+            
+            if (group) {
+                const activeBtn = group.querySelector('.active');
+                if (activeBtn) selectedSize = activeBtn.innerText;
+            }
+
+            cart.push({ name: product.name, price: product.price, size: selectedSize });
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-badge').innerText = cart.length;
+            const listContainer = document.getElementById('cart-items-list');
+            let total = 0;
+
+            if (cart.length === 0) {
+                listContainer.innerHTML = `<p class="text-center text-gray-500 text-xs py-4">الكبسولة فارغة حالياً..</p>`;
+                document.getElementById('cart-total-price').innerText = "0 EGP";
+                return;
+            }
+
+            listContainer.innerHTML = "";
+            cart.forEach((item, index) => {
+                total += item.price;
+                listContainer.innerHTML += `
+                    <div class="flex justify-between items-center bg-black/50 p-3 rounded-xl border border-white/5 text-xs hover:border-orange-500/30 transition">
+                        <div>
+                            <span class="font-bold text-gray-200 block">${item.name}</span>
+                            <span class="text-[10px] text-gray-500 mt-1 block">المقاس: ${item.size} | <span class="text-orange-400 font-bold">${item.price} EGP</span></span>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-gray-600 hover:text-red-500 font-bold px-2 transition">✕</button>
+                    </div>
+                `;
+            });
+            document.getElementById('cart-total-price').innerText = total + " EGP";
+        }
+
+        function removeFromCart(index) { cart.splice(index, 1); updateCartUI(); }
+        function openCartModal() { document.getElementById('cart-modal').classList.remove('hidden'); }
+        function closeCartModal() { document.getElementById('cart-modal').classList.add('hidden'); }
+
+        async function submitOrderToSupabase(e) {
+            e.preventDefault();
+            if (cart.length === 0) { alert('الكبسولة فارغة!'); return; }
+
+            const name = document.getElementById('cust-name').value;
+            const phone = document.getElementById('cust-phone').value;
+            const address = document.getElementById('cust-address').value;
+            let total = cart.reduce((sum, item) => sum + item.price, 0) + " EGP";
+            let itemsSummary = cart.map(i => `${i.name} (${i.size})`).join('، ');
+
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.innerText = "جاري الإطلاق...";
+            submitBtn.disabled = true;
+
+            const { data, error } = await supabaseClient
+                .from('orders')
+                .insert([{ customer_name: name, phone: phone, address: address, items: itemsSummary, total: total }]);
+
+            submitBtn.innerText = "تأكيد الإطلاق 🚀";
+            submitBtn.disabled = false;
+
+            if (error) {
+                alert('خطأ في الاتصال بالقاعدة، برجاء المحاولة مرة أخرى.');
+            } else {
+                alert('تم الإطلاق! أوردرك وصل لمركز القيادة بنجاح 🚀');
+                cart = []; updateCartUI(); closeCartModal(); document.getElementById('checkout-form').reset();
+            }
+        }
+
+        window.onload = renderProducts;
+    </script>
+</body>
+</html>
