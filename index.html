@@ -144,17 +144,14 @@
     <!-- JavaScript -->
     <script>
         // إعدادات اتصال Supabase
-        const SUPABASE_URL = 'https://girbqgwygqlwbppetpnt.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_8ncia4DA9wGoO_9YTFID-g_2lCvg~...'; // ضف مفتاحك هنا
+        const SUPABASE_URL = 'https://grvthtmcqyltvtbffmhf.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_eGlVgz9MIuzKEcg65vPRuw_8i6PbYQe';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // قائمة منتجات المريخ
         const products = [
-            { id: 1, name: "هودي الجاذبية - أوفر سايز", price: 850, category: "clothing", image: "image.png", sizes: ["M", "L", "XL", "XXL"] },
-            { id: 2, name: "تيشيرت المدار", price: 550, category: "clothing", image: "image.png", sizes: ["S", "M", "L", "XL"] },
-            { id: 3, name: "بنطلون كارغو النيزك", price: 700, category: "shoes", image: "image.png", sizes: ["30", "32", "34", "36"] },
-            { id: 4, name: "سلسلة الفضاء", price: 250, category: "accessories", image: "image.png", sizes: ["أستاندرد"] },
-            { id: 5, name: "طقم المريخ الكامل", price: 1900, category: "offers", image: "image.png", sizes: ["M", "L", "XL"] }
+            { id: 1, name: "هودي ORION - بوكس فت", price: 850, category: "clothing", image: "orion.png", sizes: ["M", "L", "XL", "XXL"] },
+           
         ];
 
         let cart = [];
@@ -176,7 +173,7 @@
                     <div class="glass-card rounded-3xl overflow-hidden shadow-sm hover:border-orange-500/50 hover:-translate-y-1 transition duration-300 p-4 flex flex-col justify-between ${p.category === 'offers' ? 'bg-black/40 border-orange-500/30' : ''}">
                         <div>
                             <div class="h-56 bg-gray-900/60 rounded-2xl flex items-center justify-center text-gray-600 text-sm mb-4 border border-white/5 relative overflow-hidden group">
-                                <img src="${p.image}" alt="${p.name}" class="w-1/2 h-auto object-contain drop-shadow-[0_0_15px_rgba(234,88,12,0.3)] group-hover:scale-110 transition duration-500" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                                 <span style="display:none;" class="text-xs font-bold">[ صورة المنتج ]</span>
                             </div>
                             <h3 class="font-bold text-gray-200 text-lg">${p.name}</h3>
@@ -276,7 +273,8 @@
             submitBtn.disabled = false;
 
             if (error) {
-                alert('خطأ في الاتصال بالقاعدة، برجاء المحاولة مرة أخرى.');
+            alert('الخطأ هو: ' + error.message);
+            console.log(error);
             } else {
                 alert('تم الإطلاق! أوردرك وصل لمركز القيادة بنجاح 🚀');
                 cart = []; updateCartUI(); closeCartModal(); document.getElementById('checkout-form').reset();
